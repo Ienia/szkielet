@@ -1,0 +1,17 @@
+﻿  main_file.cpp
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\Skeleton.h(46756,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\Skeleton.h(93503,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\Skeleton.h(140250,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\main_file.cpp(184,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\main_file.cpp(185,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  Skeleton.cpp
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\Skeleton.h(46756,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\Skeleton.h(93503,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\Skeleton.h(140250,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Generating Code...
+Skeleton.obj : error LNK2005: "int SkeletonVertices" (?SkeletonVertices@@3HA) already defined in main_file.obj
+Skeleton.obj : error LNK2005: "float * SkeletonPositions" (?SkeletonPositions@@3PAMA) already defined in main_file.obj
+Skeleton.obj : error LNK2005: "float * SkeletonTexels" (?SkeletonTexels@@3PAMA) already defined in main_file.obj
+Skeleton.obj : error LNK2005: "float * SkeletonNormals" (?SkeletonNormals@@3PAMA) already defined in main_file.obj
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\x64\Debug\vc120.pdb'; linking object as if no debug info
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\x64\Debug\bio_szkielet_08_win.exe : fatal error LNK1169: one or more multiply defined symbols found

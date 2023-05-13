@@ -1,0 +1,40 @@
+﻿  main_file.cpp
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\head.h(7411,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\head.h(14813,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\head.h(22215,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\torso.h(25510,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\torso.h(51011,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\torso.h(76512,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\forearmRight.h(3457,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\forearmRight.h(6905,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\forearmRight.h(10353,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\forearmLeft.h(3457,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\forearmLeft.h(6905,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\forearmLeft.h(10353,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\legRight.h(2977,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\legRight.h(5945,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\legRight.h(8913,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\legLeft.h(2977,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\legLeft.h(5945,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\legLeft.h(8913,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\armRight.h(241,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\armRight.h(473,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\armRight.h(705,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\armLeft.h(241,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\armLeft.h(473,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\armLeft.h(705,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\thighLeft.h(301,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\thighLeft.h(593,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\thighLeft.h(885,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\thighRight.h(301,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\thighRight.h(593,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\thighRight.h(885,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\main_file.cpp(307,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\main_file.cpp(308,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  Generating code
+  2 of 215 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\x64\Release\vc120.pdb'; linking object as if no debug info
+  bio_szkielet_08_win.vcxproj -> C:\Users\lenka\Downloads\bio_szkielet_08_win\bio_szkielet_08_win\x64\Release\bio_szkielet_08_win.exe
