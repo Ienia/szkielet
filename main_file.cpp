@@ -18,7 +18,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 */
 
 #define GLM_FORCE_RADIANS
-#define GLM_FORCE_SWIZZLE
+#define GLM_FORCE_SWIZZLE  
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -27,11 +27,14 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdlib.h>
 #include <stdio.h>
+#include <Windows.h>
 #include "constants.h"
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "myCube.h"
 #include "myTeapot.h"
+
+#pragma comment(lib, "winmm.lib")
 
 // ZAŁĄCZ SZKIELETA W KAWAŁKACH
 #include "head.h"
@@ -58,6 +61,13 @@ float* texCoords = SkeletonTexels;
 float* colors = SkeletonColors;
 int vertexCount = SkeletonVertices;
 */
+
+//OTOCZENIE
+float* verticesCube = myCubeVertices;
+float* normalsCube = myCubeNormals;
+float* texCoordsCube = myCubeTexCoords;
+float* colorsCube = myCubeColors;
+int vertexCountCube = myCubeVertexCount;
 
 // HEAD
 float* verticesHead = headPositions;
@@ -164,6 +174,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glEnable(GL_DEPTH_TEST);
 	glfwSetWindowSizeCallback(window,windowResizeCallback);
 	glfwSetKeyCallback(window,keyCallback);
+	PlaySound(TEXT("Spooky_scary_skeletons.wav"), NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
 
 	sp=new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
 }
@@ -176,6 +187,12 @@ void freeOpenGLProgram(GLFWwindow* window) {
     delete sp;
 }
 
+void draw(float* vertices, float* colors, float* normals, float verticesCount) {
+	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, vertices); //Wskaż tablicę z danymi dla atrybutu vertex
+	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colors); //Wskaż tablicę z danymi dla atrybutu color
+	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normals); //Wskaż tablicę z danymi dla atrybutu normal
+	glDrawArrays(GL_TRIANGLES, 0, verticesCount); //Narysuj obiekt
+}
 
 
 
@@ -192,73 +209,112 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
     glm::mat4 P=glm::perspective(50.0f*PI/180.0f, aspectRatio, 0.1f, 100.0f); //Wylicz macierz rzutowania
 
     glm::mat4 M=glm::mat4(1.0f);
-	//M=glm::rotate(M,angle_y,glm::vec3(1.0f,0.0f,0.0f)); //Wylicz macierz modelu
-	//M=glm::rotate(M,angle_x,glm::vec3(0.0f,1.0f,0.0f)); //Wylicz macierz modelu
 
     sp->use();//Aktywacja programu cieniującego
     //Przeslij parametry programu cieniującego do karty graficznej
     glUniformMatrix4fv(sp->u("P"),1,false,glm::value_ptr(P));
     glUniformMatrix4fv(sp->u("V"),1,false,glm::value_ptr(V));
     glUniformMatrix4fv(sp->u("M"),1,false,glm::value_ptr(M));
+	glUniform4f(sp->u("lp"), 0, 0, 0, 1);
 
     glEnableVertexAttribArray(sp->a("vertex"));  //Włącz przesyłanie danych do atrybutu vertex
 	glEnableVertexAttribArray(sp->a("color"));  //Włącz przesyłanie danych do atrybutu color
 	glEnableVertexAttribArray(sp->a("normal"));  //Włącz przesyłanie danych do atrybutu color
 
-    glVertexAttribPointer(sp->a("vertex"),3,GL_FLOAT,false,0,verticesHead); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsHead); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsHead); //Wskaż tablicę z danymi dla atrybutu normal
-    glDrawArrays(GL_TRIANGLES,0,vertexCountHead); //Narysuj obiekt
+	for (int i = 0; i < 4; i++) {
+		M = glm::mat4(1.0f);
+		M = glm::rotate(M, angle_x + sin(2.0f * 3.15f * angle_x + 3.1415f) / (3.0f * 3.15f), glm::vec3(0.0f, 1.0f, 0.0f));
+		M = glm::translate(M, glm::vec3(0.0f, 5*abs(sin(3.15f * angle_x)), 0.0f));
+		M = glm::rotate(M, i * 3.1415f /2.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		M = glm::translate(M, glm::vec3(0.0f, 0.0f, -14.0f));
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesTorso); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsTorso); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsTorso); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountTorso); //Narysuj obiekt
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
+		draw(verticesTorso, colorsTorso, normalsTorso, vertexCountTorso);
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesLeftThigh); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsLeftThigh); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsLeftThigh); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountLeftThigh); //Narysuj obiekt
+		//zlokalizowanie głowy
+		glm::mat4 MHead = glm::translate(M, glm::vec3(0.012f, 36.03f, -0.69f));
+		//tutaj mogą być rotaty
+		//MHead = glm::rotate(MHead, angle_y, glm::vec3(1.0f, 0.0f, 0.0f));
+		MHead = glm::translate(MHead, glm::vec3(-0.012f, -36.03f, 0.69f));
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesRightThigh); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsRightThigh); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsRightThigh); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountRightThigh); //Narysuj obiekt
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MHead));
+		draw(verticesHead, colorsHead, normalsHead, vertexCountHead);
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesRightLeg); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsRightLeg); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsRightLeg); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountRightLeg); //Narysuj obiekt
+		//zlokalizowanie nogi
+		glm::mat4 MRightLeg = glm::translate(M, glm::vec3(-2.12f, 21.51f, 0.52f));
+		//tutaj mogą być rotaty
+		MRightLeg = glm::rotate(MRightLeg, - 2.0f + 2.0f * abs(sin(1.5708f * angle_x)) - 0.1f, glm::vec3(0.0f, 0.0f, 1.0f));
+		MRightLeg = glm::rotate(MRightLeg, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		MRightLeg = glm::translate(MRightLeg, glm::vec3(2.12f, -21.51f, -0.52f));
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesLeftLeg); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsLeftLeg); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsLeftLeg); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountLeftLeg); //Narysuj obiekt
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MRightLeg));
+		draw(verticesRightThigh, colorsRightThigh, normalsRightThigh, vertexCountRightThigh);
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesRightArm); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsRightArm); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsRightArm); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountRightArm); //Narysuj obiekt
+		//zlokalizowanie nogi
+		MRightLeg = glm::translate(MRightLeg, glm::vec3(1.3f, 12.7f, -0.38f));
+		//tutaj mogą być rotaty
+		MRightLeg = glm::rotate(MRightLeg, 2.0f - 2.0f * abs(sin(1.5708f * angle_x)) + 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
+		MRightLeg = glm::translate(MRightLeg, glm::vec3(-1.3f, -12.7f, 0.38f));
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesRightForearm); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsRightForearm); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsRightForearm); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountRightForearm); //Narysuj obiekt
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MRightLeg));
+		draw(verticesRightLeg, colorsRightLeg, normalsRightLeg, vertexCountRightLeg);
 
-	M = glm::translate(M, glm::vec3(4.0f, 32.0f, 0.6f));
-	M = glm::rotate(M, angle_y, glm::vec3(0.0f, 0.0f, 1.0f));
-	M = glm::translate(M, glm::vec3(-4.0f, -32.0f, -0.6f));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
+		//zlokalizowanie nogi
+		glm::mat4 MLeftLeg = glm::translate(M, glm::vec3(2.12f, 21.51f, 0.52f));
+		//tutaj mogą być rotaty
+		MLeftLeg = glm::rotate(MLeftLeg, 2.0f - 2.0f * abs(cos(1.5708f * angle_x)) + 0.1f, glm::vec3(0.0f, 0.0f, 1.0f));
+		MLeftLeg = glm::rotate(MLeftLeg, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		MLeftLeg = glm::translate(MLeftLeg, glm::vec3(-2.12f, -21.51f, -0.52f));
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesLeftArm); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsLeftArm); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsLeftArm); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountLeftArm); //Narysuj obiekt
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MLeftLeg));
+		draw(verticesLeftThigh, colorsLeftThigh, normalsLeftThigh, vertexCountLeftThigh);
 
-	glVertexAttribPointer(sp->a("vertex"), 3, GL_FLOAT, false, 0, verticesLeftForearm); //Wskaż tablicę z danymi dla atrybutu vertex
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colorsLeftForearm); //Wskaż tablicę z danymi dla atrybutu color
-	glVertexAttribPointer(sp->a("normal"), 3, GL_FLOAT, false, 0, normalsLeftForearm); //Wskaż tablicę z danymi dla atrybutu normal
-	glDrawArrays(GL_TRIANGLES, 0, vertexCountLeftForearm); //Narysuj obiekt
+		//zlokalizowanie nogi
+		MLeftLeg = glm::translate(MLeftLeg, glm::vec3(1.3f, 12.7f, -0.38f));
+		//tutaj mogą być rotaty
+		MLeftLeg = glm::rotate(MLeftLeg, 2.0f - 2.0f * abs(cos(1.5708f * angle_x)) + 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
+		MLeftLeg = glm::translate(MLeftLeg, glm::vec3(-1.3f, -12.7f, 0.38f));
+
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MLeftLeg));
+		draw(verticesLeftLeg, colorsLeftLeg, normalsLeftLeg, vertexCountLeftLeg);
+
+		//zlokalizowanie ramienia
+		glm::mat4 MRightArm = glm::translate(M, glm::vec3(-3.7f, 32.0f, -0.9f));
+		//tutaj mogą być rotaty
+		MRightArm = glm::rotate(MRightArm, -30.0f * 3.14f / 180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+		MRightArm = glm::translate(MRightArm, glm::vec3(3.7f, -32.0f, 0.9f));
+
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MRightArm));
+		draw(verticesRightArm, colorsRightArm, normalsRightArm, vertexCountRightArm);
+
+		//zlokalizowanie łokcia
+		MRightArm = glm::translate(MRightArm, glm::vec3(-4.4f, 25.9f, -0.9f));
+		//tutaj mogą być rotaty
+		//MRightArm = glm::rotate(MRightArm, angle_y, glm::vec3(0.0f, 1.0f, 0.0f));
+		MRightArm = glm::translate(MRightArm, glm::vec3(4.4f, -25.9f, 0.9f));
+
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MRightArm));
+		draw(verticesRightForearm, colorsRightForearm, normalsRightForearm, vertexCountRightForearm);
+
+		//zlokalizowanie ramienia
+		glm::mat4 MLeftArm = glm::translate(M, glm::vec3(3.7f, 32.0f, -0.9f));
+		//tutaj mogą być rotaty
+		MLeftArm = glm::rotate(MLeftArm, 30.0f * 3.14f / 180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+		MLeftArm = glm::translate(MLeftArm, glm::vec3(-3.7f, -32.0f, 0.9f));
+
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MLeftArm));
+		draw(verticesLeftArm, colorsLeftArm, normalsLeftArm, vertexCountLeftArm);
+
+		//zlokalizowanie łokcia
+		MLeftArm = glm::translate(MLeftArm, glm::vec3(4.4f, 25.9f, -0.9f));
+		//tutaj mogą być rotaty
+		//MLeftArm = glm::rotate(MLeftArm, 3.14f, glm::vec3(0.0f, 1.0f, 0.0f));
+		MLeftArm = glm::translate(MLeftArm, glm::vec3(-4.4f, -25.9f, 0.9f));
+
+		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(MLeftArm));
+		draw(verticesLeftForearm, colorsLeftForearm, normalsLeftForearm, vertexCountLeftForearm);
+	}
+	
 
     glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
 	glDisableVertexAttribArray(sp->a("color"));  //Wyłącz przesyłanie danych do atrybutu color
@@ -299,6 +355,9 @@ int main(void)
 	initOpenGLProgram(window); //Operacje inicjujące
 
 	//Główna pętla
+
+	
+
 	float angle_x=0; //Aktualny kąt obrotu obiektu
 	float angle_y=0; //Aktualny kąt obrotu obiektu
 	glfwSetTime(0); //Zeruj timer
