@@ -1,7 +1,4 @@
-#version 330
-#define GLM_FORCE_SWIZZLE
-
-float d;
+﻿#version 330
 
 //Zmienne jednorodne
 uniform mat4 P;
@@ -9,41 +6,39 @@ uniform mat4 V;
 uniform mat4 M;
 
 //Atrybuty
-in vec4 vertex; //wspolrzedne wierzcholka w przestrzeni modelu
-in vec4 color;
-in vec4 normal;
+in vec3 vertex; //wspolrzedne wierzcholka w przestrzeni modelu
+in vec4 color; //kolor związany z wierzchołkiem
+in vec3 normal; //wektor normalny w przestrzeni modelu
+in vec2 texCoord0;
 
-//zmienne interpolowane
-out vec4 iC;
+//Zmienne interpolowane
+out vec4 ic_red;
+out vec4 ic_green;
+out vec4 ic_blue;
+out vec4 l_red;
+out vec4 l_green;
+out vec4 l_blue;
+out vec4 n;
+out vec4 v;
+out vec2 iTexCoord0; 
 
 void main(void) {
-	 d = distance(V*M*vertex, vec4(0,0,0,1));
-	 d -= 50;
-	 d /= 15;
-	 d = 1 - d;
-	 iC = vec4(color.rgb * d, color.a);
-	 
     
-	
-	//wspolrzedne swiatla w przestrzeni swiata
-	vec4 lp=vec4(0,0,1,1);
-	vec4 La=vec4(0,0,0,1);
-	vec4 Ld=vec4(1,1,1,1);
-	
-	//glm::vec4 normal, vertex, lp; //wsp. Wierzcholkow
-	vec4 a = vertex - normal;
-	vec4 b = lp - normal;
+    vec4 vertexx = vec4(vertex, 1);
+    vec4 normall = vec4(normal, 1);
 
-	//Wektor normalny (wynik cross)
-	//skracamy do dlugosci jednostkowej (normalize)
-	a = vec4 (normalize(a));
-	b = vec4 (normalize(b));
+    vec4 lp_red = vec4(0, 50, 0, 1); //pozcyja światła, przestrzeń świata
+    vec4 lp_green = vec4(-20, 50, 0, 1); //pozcyja światła, przestrzeń świata
+    vec4 lp_blue = vec4(20, 50, 0, 1); //pozcyja światła, przestrzeń świata
 
-	float n = dot(a,b);
-	n = clamp(n, 0, 10);
+    l_red = normalize(V * lp_red - V*M*vertexx); //wektor do światła w przestrzeni oka
+    l_green = normalize(V * lp_green - V*M*vertexx); //wektor do światła w przestrzeni oka
+    l_blue = normalize(V * lp_blue - V*M*vertexx); //wektor do światła w przestrzeni oka
 
-	iC = La + Ld * color * n;
-
-
-	gl_Position=P*V*M*vertex;
+    v = normalize(vec4(0, 0, 0, 1) - V * M * vertexx); //wektor do obserwatora w przestrzeni oka
+    n = normalize(V * M * normall); //wektor normalny w przestrzeni oka
+    
+    iTexCoord0 = texCoord0;
+    
+    gl_Position=P*V*M*vertexx;
 }
